@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:80"
+    depends_on:
+      - db
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:80
+      ConnectionStrings__DefaultConnection: "Server=db;Port=5432;Database=myappdb;User Id=myappuser;Password=myapppassword;"
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: myappuser
+      POSTGRES_PASSWORD: myapppassword
+      POSTGRES_DB: myappdb
+    volumes:
+      - db-data:/var/lib/postgresql/data
+volumes:
+  db-data:
